@@ -14,7 +14,6 @@
     "db:seed:redteam": "tsx prisma/seed-red-team.ts"
   },
   "dependencies": {
-    "@next/swc-win32-x64-msvc": "^14.2.33",
     "@supabase/ssr": "^0.12.4",
     "@supabase/supabase-js": "^2.112.2",
     "clsx": "^2.1.1",
