@@ -1,0 +1,190 @@
+// Sahel Sec Academy — Schéma Prisma
+//
+// IMPORTANT : Supabase Auth gère déjà les comptes (email, mot de passe hashé, sessions)
+// dans le schéma `auth.users`, inaccessible et à ne jamais dupliquer. Ce modèle "Profile"
+// est une table publique liée en 1-1 à auth.users par le même id (uuid), qui stocke
+// uniquement les données métier propres à Sahel Sec Academy.
+//
+// Les directives @@map / @map transforment les noms Prisma (camelCase) en noms
+// snake_case attendus par l'API Supabase/PostgREST et par les politiques RLS.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Profile {
+  id            String    @id @map("id") // == auth.users.id (uuid Supabase)
+  email         String    @unique
+  fullName      String    @map("full_name")
+  role          Role      @default(STUDENT)
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  progress        Progress[]
+  quizAttempts    QuizAttempt[]
+  certificates    Certificate[]
+  coursesAuthored Course[] @relation("CourseAuthor")
+
+  @@map("profiles")
+}
+
+enum Role {
+  STUDENT
+  INSTRUCTOR
+  ADMIN
+}
+
+model Course {
+  id              String       @id @default(cuid())
+  slug            String       @unique
+  title           String
+  description     String
+  level           CourseLevel
+  status          CourseStatus @default(DRAFT)
+  coverImageUrl   String?      @map("cover_image_url")
+  estimatedHours  Int          @map("estimated_hours")
+  prerequisites   String?
+  authorId        String       @map("author_id")
+  author          Profile      @relation("CourseAuthor", fields: [authorId], references: [id])
+  createdAt       DateTime     @default(now()) @map("created_at")
+  updatedAt       DateTime     @updatedAt @map("updated_at")
+
+  modules       Module[]
+  progress      Progress[]
+  certificates  Certificate[]
+
+  @@index([status])
+  @@index([authorId])
+  @@map("courses")
+}
+
+enum CourseLevel {
+  DECOUVERTE
+  FONDAMENTAUX
+  SPECIALISATION
+}
+
+enum CourseStatus {
+  DRAFT
+  IN_REVIEW
+  PUBLISHED
+  ARCHIVED
+}
+
+model Module {
+  id          String   @id @default(cuid())
+  courseId    String   @map("course_id")
+  course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  title       String
+  order       Int
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  lessons     Lesson[]
+
+  @@index([courseId])
+  @@map("modules")
+}
+
+model Lesson {
+  id            String            @id @default(cuid())
+  moduleId      String            @map("module_id")
+  module        Module            @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  title         String
+  order         Int
+  contentType   LessonContentType @map("content_type")
+  contentBody   String            @map("content_body") // markdown ou HTML du texte
+  videoUrl      String?           @map("video_url")
+  transcript    String?           // obligatoire si videoUrl est renseigné
+  durationMin   Int               @map("duration_min")
+
+  quiz          Quiz?
+  progress      Progress[]
+
+  @@index([moduleId])
+  @@map("lessons")
+}
+
+enum LessonContentType {
+  TEXT
+  VIDEO
+  LAB
+}
+
+model Quiz {
+  id            String   @id @default(cuid())
+  lessonId      String   @unique @map("lesson_id")
+  lesson        Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  passingScore  Int      @default(70) @map("passing_score") // pourcentage
+
+  questions     QuizQuestion[]
+  attempts      QuizAttempt[]
+
+  @@index([lessonId])
+  @@map("quizzes")
+}
+
+model QuizQuestion {
+  id            String @id @default(cuid())
+  quizId        String @map("quiz_id")
+  quiz          Quiz   @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  question      String
+  choices       Json // ["choix A", "choix B", "choix C", "choix D"]
+  correctIndex  Int    @map("correct_index")
+  order         Int
+
+  @@index([quizId])
+  @@map("quiz_questions")
+}
+
+model QuizAttempt {
+  id          String   @id @default(cuid())
+  quizId      String   @map("quiz_id")
+  quiz        Quiz     @relation(fields: [quizId], references: [id])
+  userId      String   @map("user_id")
+  user        Profile  @relation(fields: [userId], references: [id])
+  score       Int      // pourcentage obtenu
+  passed      Boolean
+  answers     Json     // réponses données par l'utilisateur
+  attemptedAt DateTime @default(now()) @map("attempted_at")
+
+  @@index([userId])
+  @@index([quizId])
+  @@map("quiz_attempts")
+}
+
+model Progress {
+  id          String    @id @default(cuid())
+  userId      String    @map("user_id")
+  user        Profile   @relation(fields: [userId], references: [id])
+  courseId    String    @map("course_id")
+  course      Course    @relation(fields: [courseId], references: [id])
+  lessonId    String    @map("lesson_id")
+  lesson      Lesson    @relation(fields: [lessonId], references: [id])
+  completed   Boolean   @default(false)
+  completedAt DateTime? @map("completed_at")
+
+  @@unique([userId, lessonId])
+  @@index([courseId])
+  @@map("progress")
+}
+
+model Certificate {
+  id                String   @id @default(cuid())
+  userId            String   @map("user_id")
+  user              Profile  @relation(fields: [userId], references: [id])
+  courseId          String   @map("course_id")
+  course            Course   @relation(fields: [courseId], references: [id])
+  verificationCode  String   @unique @map("verification_code") @default(cuid())
+  issuedAt          DateTime @default(now()) @map("issued_at")
+  pdfUrl            String   @map("pdf_url")
+
+  @@unique([userId, courseId])
+  @@index([userId])
+  @@map("certificates")
+}
