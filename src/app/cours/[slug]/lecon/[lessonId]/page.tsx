@@ -79,6 +79,23 @@ export default async function LessonPage({
   const progressMap = await getCourseProgress(user.id, course.id)
   const isCompleted = Boolean(progressMap[lesson.id])
 
+  // Suivi dès la première consultation : crée la ligne de progression
+  // (non terminée) pour que le cours apparaisse dans « Mes cours » du
+  // tableau de bord, même avant la première validation.
+  if (!progressMap[lesson.id]) {
+    await supabase
+      .from('progress')
+      .upsert(
+        {
+          user_id: user.id,
+          course_id: course.id,
+          lesson_id: lesson.id,
+          completed: false,
+        },
+        { onConflict: 'user_id,lesson_id', ignoreDuplicates: true },
+      )
+  }
+
   const idx = lessons.findIndex((l) => l.id === lesson.id)
   const prev = idx > 0 ? lessons[idx - 1] : null
   const next = idx < lessons.length - 1 ? lessons[idx + 1] : null
