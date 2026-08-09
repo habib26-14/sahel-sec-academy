@@ -99,6 +99,50 @@ export const quizSchema = z.object({
 })
 
 // ---------------------------------------------------------------------------
+// Import groupé d'un cours complet (fichier JSON)
+// ---------------------------------------------------------------------------
+
+/** Question de quiz : l'`order` est optionnel à l'import (auto-incrémenté). */
+export const importedQuizQuestionSchema = z
+  .object({
+    question: quizQuestionSchema.shape.question,
+    choices: quizQuestionSchema.shape.choices,
+    correctIndex: quizQuestionSchema.shape.correctIndex,
+    order: z.coerce.number().int().min(0).optional(),
+  })
+  .refine((q) => q.correctIndex < q.choices.length, {
+    path: ['correctIndex'],
+    message: 'L’indice de la bonne réponse doit pointer vers un choix existant',
+  })
+
+export const importedQuizSchema = z.object({
+  passingScore: quizSchema.shape.passingScore,
+  questions: z.array(importedQuizQuestionSchema).min(1, 'Au moins une question'),
+})
+
+export const importedLessonSchema = lessonSchema.extend({
+  quiz: importedQuizSchema.optional(),
+})
+
+export const importedModuleSchema = z.object({
+  title: moduleSchema.shape.title,
+  lessons: z.array(importedLessonSchema).min(1, 'Un module doit contenir au moins une leçon'),
+})
+
+export const courseImportSchema = z.object({
+  title: courseSchema.shape.title,
+  slug: courseSchema.shape.slug.optional(),
+  description: courseSchema.shape.description,
+  prerequisites: courseSchema.shape.prerequisites,
+  level: courseSchema.shape.level,
+  estimatedHours: courseSchema.shape.estimatedHours,
+  coverImageUrl: courseSchema.shape.coverImageUrl,
+  modules: z.array(importedModuleSchema).min(1, 'Le fichier doit contenir au moins un module'),
+})
+
+export type CourseImportData = z.infer<typeof courseImportSchema>
+
+// ---------------------------------------------------------------------------
 // Quiz — soumission apprenant
 // ---------------------------------------------------------------------------
 

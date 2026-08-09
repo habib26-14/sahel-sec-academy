@@ -10,6 +10,7 @@ import {
   moduleSchema,
   quizSchema,
 } from '@/lib/validations'
+import { parseCourseImport, resolveImportSlug, summarizeImport } from '@/lib/course-import'
 import { requireStaff } from '@/lib/auth'
 
 export type AdminActionState = { error?: string; ok?: string }
@@ -193,6 +194,129 @@ export async function deleteCourse(courseId: string): Promise<void> {
   revalidatePath('/admin')
   revalidatePath('/cours')
   redirect('/admin')
+}
+
+// ---------------------------------------------------------------------------
+// Import groupé d'un cours (fichier JSON : cours + modules + leçons + quiz)
+// ---------------------------------------------------------------------------
+
+const MAX_IMPORT_FILE_BYTES = 5 * 1024 * 1024
+
+export async function importCourseFromFile(
+  _prev: AdminActionState,
+  formData: FormData,
+): Promise<AdminActionState> {
+  const supabase = await getSupabase()
+
+  const file = formData.get('file')
+  if (!(file instanceof File)) return { error: 'Fichier manquant.' }
+  if (file.size > MAX_IMPORT_FILE_BYTES) {
+    return { error: 'Fichier trop volumineux (5 Mo maximum).' }
+  }
+
+  const raw = await file.text()
+  const imported = parseCourseImport(raw)
+  if (!imported.ok) return { error: imported.error }
+  const data = imported.data
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) return { error: 'Session expirée, reconnectez-vous.' }
+
+  // Slug unique : celui du fichier, sinon dérivé du titre
+  const { data: existing } = await supabase
+    .from('courses')
+    .select('slug')
+    .returns<{ slug: string }[]>()
+  const slug = resolveImportSlug(data.title, data.slug, new Set((existing ?? []).map((c) => c.slug)))
+
+  const { data: course, error: courseError } = await supabase
+    .from('courses')
+    .insert({
+      title: data.title,
+      slug,
+      description: data.description,
+      prerequisites: data.prerequisites || null,
+      level: data.level,
+      estimated_hours: data.estimatedHours,
+      cover_image_url: data.coverImageUrl || null,
+      author_id: user.id,
+      status: 'DRAFT',
+    })
+    .select('id')
+    .maybeSingle<{ id: string }>()
+  if (courseError || !course) {
+    return { error: friendlyError(courseError ?? new Error('Création impossible'), 'import-course') }
+  }
+  const courseId = course.id
+
+  // Insertion en cascade ; en cas d'échec à mi-parcours on supprime le cours
+  // (les FK ON DELETE CASCADE nettoient modules, leçons, quiz et questions).
+  try {
+    for (let moduleIndex = 0; moduleIndex < data.modules.length; moduleIndex++) {
+      const moduleData = data.modules[moduleIndex]
+      const { data: moduleRow, error: moduleError } = await supabase
+        .from('modules')
+        .insert({
+          course_id: courseId,
+          title: moduleData.title,
+          order: moduleIndex + 1,
+        })
+        .select('id')
+        .maybeSingle<{ id: string }>()
+      if (moduleError || !moduleRow) throw moduleError ?? new Error('Module non créé')
+
+      for (let lessonIndex = 0; lessonIndex < moduleData.lessons.length; lessonIndex++) {
+        const lessonData = moduleData.lessons[lessonIndex]
+        const { data: lesson, error: lessonError } = await supabase
+          .from('lessons')
+          .insert({
+            module_id: moduleRow.id,
+            title: lessonData.title,
+            order: lessonIndex + 1,
+            content_type: lessonData.contentType,
+            content_body: lessonData.contentBody,
+            video_url: lessonData.videoUrl || null,
+            transcript: lessonData.transcript || null,
+            duration_min: lessonData.durationMin,
+          })
+          .select('id')
+          .maybeSingle<{ id: string }>()
+        if (lessonError || !lesson) throw lessonError ?? new Error('Leçon non créée')
+
+        if (lessonData.quiz) {
+          const { data: quiz, error: quizError } = await supabase
+            .from('quizzes')
+            .insert({
+              lesson_id: lesson.id,
+              passing_score: lessonData.quiz.passingScore,
+            })
+            .select('id')
+            .maybeSingle<{ id: string }>()
+          if (quizError || !quiz) throw quizError ?? new Error('Quiz non créé')
+
+          const { error: questionsError } = await supabase.from('quiz_questions').insert(
+            lessonData.quiz.questions.map((q: { question: string; choices: string[]; correctIndex: number }, i: number) => ({
+              quiz_id: quiz.id,
+              question: q.question,
+              choices: q.choices,
+              correct_index: q.correctIndex,
+              order: i,
+            })),
+          )
+          if (questionsError) throw questionsError
+        }
+      }
+    }
+  } catch (insertError) {
+    console.error('[admin:import_course:rollback]', (insertError as Error).message)
+    await supabase.from('courses').delete().eq('id', courseId) // cascade → tout
+    return { error: 'Import annulé : erreur pendant l’enregistrement. Aucune donnée insérée.' }
+  }
+
+  revalidateCourse(courseId, slug)
+  redirect(`/admin/cours/${courseId}?flash=${encodeURIComponent(summarizeImport(data))}`)
 }
 
 // ---------------------------------------------------------------------------

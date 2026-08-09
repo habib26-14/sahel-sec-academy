@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { BookOpen, LayoutDashboard, PlusCircle } from 'lucide-react'
+import { BookOpen, FileJson2, LayoutDashboard, PlusCircle } from 'lucide-react'
 import { requireStaff, isStaff } from '@/lib/auth'
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -18,10 +18,14 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             Créez et publiez les cours de l’Academy.
           </p>
         </div>
-        <nav className="flex items-center gap-1 rounded-xl border border-slate-200 bg-white p-1">
+        <nav className="flex flex-wrap items-center gap-1 rounded-xl border border-slate-200 bg-white p-1">
           <Link href="/admin" className={`${navClass} text-navy hover:bg-navy-50`}>
             <LayoutDashboard className="h-4 w-4" aria-hidden="true" />
             Mes cours
+          </Link>
+          <Link href="/admin/importer" className={`${navClass} text-navy hover:bg-navy-50`}>
+            <FileJson2 className="h-4 w-4" aria-hidden="true" />
+            Importer
           </Link>
           <Link href="/admin/nouveau" className="btn">
             <PlusCircle className="h-4 w-4" aria-hidden="true" />
