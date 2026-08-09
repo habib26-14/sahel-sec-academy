@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { getCurrentUser, isStaff } from '@/lib/auth'
 import { rateLimit } from '@/lib/rate-limit'
 import { NextResponse } from 'next/server'
 
@@ -28,7 +29,11 @@ export async function GET(request: Request) {
     const supabase = createClient()
     const { error } = await supabase.auth.exchangeCodeForSession(code)
     if (!error) {
-      return NextResponse.redirect(`${origin}${recovery ?? safeNext}`)
+      // Après une connexion staff (Google / confirmation d'email), la seule
+      // entrée vers /admin est cette redirection de connexion.
+      const user = await getCurrentUser()
+      const dest = recovery ?? (isStaff(user) ? '/admin' : safeNext)
+      return NextResponse.redirect(`${origin}${dest}`)
     }
   }
 

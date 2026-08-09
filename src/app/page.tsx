@@ -8,6 +8,7 @@ import {
   ShieldCheck,
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
+import { getCurrentUser } from '@/lib/auth'
 import CourseCard from '@/components/course-card'
 import LevelBadge from '@/components/level-badge'
 import CyberViceFeed from '@/components/cybervice-feed'
@@ -15,6 +16,7 @@ import { COURSE_LEVEL_DESCRIPTIONS, CYBERVICE_MEDIUM_URL, CYBERVICE_TIKTOK_URL }
 import type { CourseRow } from '@/lib/types'
 
 export default async function HomePage() {
+  const user = await getCurrentUser()
   const supabase = createClient()
   let featured: CourseRow[] | null = null
   try {
@@ -49,10 +51,12 @@ export default async function HomePage() {
               bâtissez votre futur numérique.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link href="/inscription" className="btn !px-6 !py-3">
-                Commencer gratuitement — sans carte bancaire
-                <ArrowRight className="h-5 w-5" aria-hidden="true" />
-              </Link>
+              {!user && (
+                <Link href="/inscription" className="btn !px-6 !py-3">
+                  Commencer gratuitement — sans carte bancaire
+                  <ArrowRight className="h-5 w-5" aria-hidden="true" />
+                </Link>
+              )}
               <Link
                 href="/cours"
                 className="inline-flex items-center justify-center gap-2 rounded-lg border border-navy-100/40 px-6 py-3 font-semibold text-white hover:bg-navy-700"

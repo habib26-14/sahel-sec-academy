@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 import { headers } from 'next/headers'
 import { createClient } from '@/lib/supabase/server'
+import { getCurrentUser, isStaff } from '@/lib/auth'
 import { forgotPasswordSchema, loginSchema, registerSchema, resetPasswordSchema } from '@/lib/validations'
 import { absoluteUrl } from '@/lib/utils'
 import { rateLimit } from '@/lib/rate-limit'
@@ -43,7 +44,10 @@ export async function loginAction(
   if (error) return { error: 'Email ou mot de passe incorrect.' }
 
   revalidatePath('/', 'layout')
-  redirect('/tableau-de-bord')
+  // /admin n'est atteint que par cette redirection, juste après une
+  // connexion staff (seul point d'entrée du chemin de gestion).
+  const user = await getCurrentUser()
+  redirect(isStaff(user) ? '/admin' : '/tableau-de-bord')
 }
 
 export async function registerAction(

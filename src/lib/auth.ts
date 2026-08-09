@@ -1,4 +1,4 @@
-import { redirect } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import { createClient as createSupabaseClient } from '@/lib/supabase/server'
 import type { ProfileRow, SessionUser } from '@/lib/types'
 
@@ -38,9 +38,12 @@ export function isStaff(user: Pick<SessionUser, 'role'> | null): boolean {
   return user?.role === 'INSTRUCTOR' || user?.role === 'ADMIN'
 }
 
-/** Redirige vers le catalogue si l'utilisateur n'est pas staff. */
+/**
+ * Garde des pages /admin : non connecté ou non staff → 404 (le chemin
+ * n'existe pas pour eux : ni accessible, ni énumérable).
+ */
 export async function requireStaff(): Promise<SessionUser> {
-  const user = await requireUser()
-  if (!isStaff(user)) redirect('/cours')
+  const user = await getCurrentUser()
+  if (!user || !isStaff(user)) notFound()
   return user
 }

@@ -1,10 +1,9 @@
 import Link from 'next/link'
 import { BookOpen, FileJson2, LayoutDashboard, PlusCircle } from 'lucide-react'
-import { requireStaff, isStaff } from '@/lib/auth'
+import { requireStaff } from '@/lib/auth'
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
-  const user = await requireStaff()
-  if (!isStaff(user)) return null
+  await requireStaff()
 
   const navClass =
     'inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold'

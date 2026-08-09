@@ -5,7 +5,6 @@ import { cn } from '@/lib/utils'
 import { signOutAction } from '@/lib/actions/auth'
 
 export default function Header({ user }: { user: SessionUser | null }) {
-  const isStaff = user?.role === 'INSTRUCTOR' || user?.role === 'ADMIN'
 
   const navLink = (href: string, label: string) => (
     <Link
@@ -24,7 +23,6 @@ export default function Header({ user }: { user: SessionUser | null }) {
         <nav className="hidden items-center gap-1 md:flex">
           {navLink('/cours', 'Catalogue')}
           {user && navLink('/tableau-de-bord', 'Mon tableau de bord')}
-          {isStaff && navLink('/admin', 'Gestion')}
         </nav>
 
         <div className="flex items-center gap-2">
@@ -59,7 +57,6 @@ export default function Header({ user }: { user: SessionUser | null }) {
       <nav className="container-x flex items-center gap-1 border-t border-slate-100 py-2 md:hidden">
         {mobileLink('/cours', 'Catalogue')}
         {user && mobileLink('/tableau-de-bord', 'Mes cours')}
-        {isStaff && mobileLink('/admin', 'Gestion')}
       </nav>
     </header>
   )
