@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     template: '%s · Sahel Sec Academy',
   },
   description:
-    'Plateforme e-learning gratuite de cybersécurité pour l’Afrique de l’Ouest et le Sahel. Cours gratuits en français, avec certificat vérifiable.',
+    'Plateforme e-learning gratuite de cybersécurité pour l’Afrique de l’Ouest et le Sahel. Cours gratuits, avec certificat vérifiable.',
   keywords: ['cybersécurité', 'cours gratuit', 'e-learning', 'Sahel', 'Afrique de l’Ouest', 'certificat'],
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',

@@ -14,7 +14,7 @@ export default function Footer() {
             <span className="font-bold text-navy">{SITE_NAME}</span>
           </div>
           <p className="mt-3 max-w-md text-sm text-slate-600">
-            Des cours de cybersécurité gratuits, en français, ouverts à tous.
+            Des cours de cybersécurité gratuits, ouverts à tous.
             Une initiative de {COMPANY_NAME} pour rendre le numérique plus sûr
             au Sahel et en Afrique de l’Ouest.
           </p>

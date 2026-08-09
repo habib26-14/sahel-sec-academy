@@ -42,7 +42,7 @@ export default async function CoursesPage({
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-navy">Catalogue des cours</h1>
         <p className="mt-2 max-w-2xl text-slate-600">
-          Gratuits, en français, accessibles partout. Chaque cours
+          Gratuits, accessibles partout. Chaque cours
           est validé par un quiz et débouche sur un certificat vérifiable.
         </p>
       </div>

@@ -44,7 +44,7 @@ export default async function HomePage() {
               Le piratage ne prévient pas. Vous, si.
             </h1>
             <p className="mt-4 max-w-xl text-lg text-navy-100">
-              Des cours de cybersécurité gratuits, en français, avec certificat
+              Des cours de cybersécurité gratuits, avec certificat
               vérifiable. Apprenez à votre rythme, protégez vos données et
               bâtissez votre futur numérique.
             </p>
