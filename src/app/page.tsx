@@ -53,7 +53,7 @@ export default async function HomePage() {
             <div className="mt-8 flex flex-wrap gap-3">
               {!user && (
                 <Link href="/inscription" className="btn !px-6 !py-3">
-                  Commencer gratuitement — sans carte bancaire
+                  Commencer gratuitement
                   <ArrowRight className="h-5 w-5" aria-hidden="true" />
                 </Link>
               )}
