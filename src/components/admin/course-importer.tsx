@@ -135,7 +135,7 @@ export default function CourseImporter() {
             <FileJson2 className="h-8 w-8 text-teal" aria-hidden="true" />
             <span className="text-sm font-semibold text-navy">Choisir un fichier JSON</span>
             <span className="text-xs text-slate-500">
-              Cliquez pour parcourir vos fichiers — le fichier est analysé localement avant
+              Cliquez pour parcourir vos fichiers - le fichier est analysé localement avant
               l’import.
             </span>
           </label>
@@ -158,7 +158,7 @@ export default function CourseImporter() {
                   <p className="font-medium">{preview.title}</p>
                   <p className="mt-1 text-teal-700">
                     {preview.moduleCount} module(s) · {preview.lessonCount} leçon(s) ·{' '}
-                    {preview.quizCount} quiz — sera créé en statut « Brouillon ».
+                    {preview.quizCount} quiz - sera créé en statut « Brouillon ».
                   </p>
                 </>
               )}

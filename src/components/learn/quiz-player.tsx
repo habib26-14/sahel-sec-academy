@@ -93,7 +93,7 @@ export default function QuizPlayer({
           <p className="text-sm text-navy-700">
             Seuil de réussite : {result.passingScore}%.{' '}
             {result.passed
-              ? 'Quiz réussi — bravo !'
+              ? 'Quiz réussi - bravo !'
               : 'Quiz non validé, vous pouvez réessayer.'}
           </p>
           {result.certificateIssued && (

@@ -159,7 +159,7 @@ export default async function CourseDetailPage({
             {course.modules.map((module, mi) => (
               <li key={module.id} className="card overflow-hidden">
                 <h3 className="border-b border-slate-100 bg-navy-50/50 px-4 py-3 font-bold text-navy">
-                  Module {mi + 1} — {module.title}
+                  Module {mi + 1} - {module.title}
                 </h3>
                 <ul className="divide-y divide-slate-100">
                   {module.lessons.map((lesson, li) => {

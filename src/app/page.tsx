@@ -133,7 +133,7 @@ export default async function HomePage() {
           </div>
         ) : (
           <div className="card p-10 text-center text-slate-500">
-            Nos premiers cours sont en cours de préparation — revenez très vite !
+            Nos premiers cours sont en cours de préparation - revenez très vite !
           </div>
         )}
       </section>
@@ -144,7 +144,7 @@ export default async function HomePage() {
           <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
             <div>
               <p className="text-sm font-semibold text-teal">DERNIERS ARTICLES</p>
-              <h2 className="mt-1 text-2xl font-bold">CyberVice — la veille & l’analyse</h2>
+              <h2 className="mt-1 text-2xl font-bold">CyberVice - la veille & l’analyse</h2>
               <p className="mt-2 max-w-xl text-sm text-navy-100">
                 Tous les points de vue, les alertes et les tutos écrits par notre
                 communauté. Le savoir débarque aussi sur Medium et TikTok.

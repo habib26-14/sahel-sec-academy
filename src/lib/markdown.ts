@@ -1,6 +1,6 @@
 /**
  * Mini-rendu Markdown sans dépendance.
- * SÉCURITÉ : le HTML est échappé en premier — aucune injection possible.
+ * SÉCURITÉ : le HTML est échappé en premier - aucune injection possible.
  * Formats gérés : titres, paragraphes, listes, blocs de code, gras,
  * italique, code inline, liens, retours à la ligne.
  */

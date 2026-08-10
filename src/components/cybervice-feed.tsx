@@ -5,7 +5,7 @@ import { CYBERVICE_MEDIUM_URL } from '@/lib/constants'
 import { formatDateFr } from '@/lib/utils'
 
 /**
- * Widget « Derniers articles CyberVice » — serveur.
+ * Widget « Derniers articles CyberVice » - serveur.
  * Le flux RSS est mis en cache par Next.js (revalidation MEDIUM_REVALIDATE_SECONDS) :
  * Medium n'est jamais appelé à chaque visite.
  */
@@ -20,7 +20,7 @@ export default async function CyberViceFeed() {
   if (articles.length === 0) {
     return (
       <div className="card p-8 text-center text-sm text-slate-500">
-        Les derniers articles arrivent bientôt — suivez{' '}
+        Les derniers articles arrivent bientôt - suivez{' '}
         <a
           href={CYBERVICE_MEDIUM_URL}
           target="_blank"

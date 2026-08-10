@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client'
 const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient }
 
 /**
- * Singleton Prisma — les requêtes runtime passent par le client Supabase
+ * Singleton Prisma - les requêtes runtime passent par le client Supabase
  * (RLS), Prisma reste le référentiel schéma + migrations versionnées.
  */
 export const prisma =

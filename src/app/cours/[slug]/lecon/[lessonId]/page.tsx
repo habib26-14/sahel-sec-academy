@@ -100,7 +100,7 @@ export default async function LessonPage({
   const prev = idx > 0 ? lessons[idx - 1] : null
   const next = idx < lessons.length - 1 ? lessons[idx + 1] : null
 
-  // Anti-triche : correct_index n'est pas envoyé au navigateur — la
+  // Anti-triche : correct_index n'est pas envoyé au navigateur - la
   // correction s'appuie uniquement sur la réponse du serveur (result.details).
   const { data: quiz } = await supabase
     .from('quizzes')

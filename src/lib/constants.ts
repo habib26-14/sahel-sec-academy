@@ -6,7 +6,7 @@ export const CYBERVICE_TIKTOK_URL = 'https://www.tiktok.com/@cybervice26'
 export const CYBERVICE_RSS_URL =
   process.env.MEDIUM_RSS_URL ?? 'https://medium.com/feed/@cybervice26'
 export const MEDIUM_REVALIDATE_SECONDS = Number(
-  process.env.MEDIUM_REVALIDATE_SECONDS ?? 21600,
+  process.env.MEDIUM_REVALIDATE_SECONDS ?? 600,
 )
 
 export const BUCKET_CERTIFICATES = 'certificates'

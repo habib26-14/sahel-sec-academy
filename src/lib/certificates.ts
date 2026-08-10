@@ -97,7 +97,7 @@ function drawSeal(page: PDFPage, cx: number, cy: number) {
 
 /**
  * Génère le PDF du certificat (A4 paysage, charte Sahel Sec Academy).
- * Aucune police externe : Helvetica (WinAnsi) — petits fichiers, pas de réseau.
+ * Aucune police externe : Helvetica (WinAnsi) - petits fichiers, pas de réseau.
  */
 export async function generateCertificatePdf(input: CertificateParams): Promise<Uint8Array> {
   const pdf = await PDFDocument.create()
@@ -139,7 +139,7 @@ export async function generateCertificatePdf(input: CertificateParams): Promise<
   page.drawLine({ start: { x: 56, y: 214 }, end: { x: 200, y: 214 }, thickness: 1, color: TEAL })
   page.drawText('Signature', { x: 108, y: 198, size: 9, font, color: GREY })
 
-  // CODE DE VÉRIFICATION — centré (le lien URL complet a été retiré :
+  // CODE DE VÉRIFICATION - centré (le lien URL complet a été retiré :
   // la vérification se fait avec le code seul sur le site).
   drawCentered('CODE DE VÉRIFICATION', 11, 176, fontBold, NAVY)
   const codeWidth = font.widthOfTextAtSize(input.verificationCode, 14)
@@ -160,7 +160,7 @@ export async function generateCertificatePdf(input: CertificateParams): Promise<
     }
   }
 
-  // Sceau de certification (rosette) — coin inférieur droit
+  // Sceau de certification (rosette) - coin inférieur droit
   drawSeal(page, 730, 130)
 
   // Footer de marque (domaine racine, pas de lien de vérification)
@@ -172,7 +172,7 @@ export async function generateCertificatePdf(input: CertificateParams): Promise<
       return input.siteUrl
     }
   })()
-  const footer = `© ${year} Sahel Sec Academy — une initiative Sahel Sec × CyberVice · ${host}`
+  const footer = `© ${year} Sahel Sec Academy - une initiative Sahel Sec × CyberVice · ${host}`
   const footerWidth = font.widthOfTextAtSize(footer, 9)
   page.drawText(footer, { x: centerX - footerWidth / 2, y: 46, size: 9, font, color: GREY })
 

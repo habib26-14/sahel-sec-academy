@@ -143,7 +143,7 @@ export const courseImportSchema = z.object({
 export type CourseImportData = z.infer<typeof courseImportSchema>
 
 // ---------------------------------------------------------------------------
-// Quiz — soumission apprenant
+// Quiz - soumission apprenant
 // ---------------------------------------------------------------------------
 
 export const quizSubmissionSchema = z.object({

@@ -59,7 +59,7 @@ body {
   .card {
     @apply rounded-xl border border-slate-200 bg-white shadow-sm;
   }
-  /* Contenu de leçon (Markdown rendu) — typographie sobre et lisible */
+  /* Contenu de leçon (Markdown rendu) - typographie sobre et lisible */
   .prose-lean {
     @apply max-w-prose text-[15px] leading-relaxed text-navy-800;
   }

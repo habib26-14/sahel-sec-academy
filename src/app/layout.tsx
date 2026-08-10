@@ -6,7 +6,7 @@ import { getCurrentUser } from '@/lib/auth'
 
 export const metadata: Metadata = {
   title: {
-    default: 'Sahel Sec Academy — Cybersécurité gratuite pour tous',
+    default: 'Sahel Sec Academy - Cybersécurité gratuite pour tous',
     template: '%s · Sahel Sec Academy',
   },
   description:

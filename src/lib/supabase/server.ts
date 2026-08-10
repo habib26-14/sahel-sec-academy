@@ -23,7 +23,7 @@ export function createClient() {
             )
           } catch {
             // Appelé depuis un Server Component : les cookies sont
-            // déjà en lecture seule — le refresh de session est géré
+            // déjà en lecture seule - le refresh de session est géré
             // par le middleware, c'est sans conséquence.
           }
         },

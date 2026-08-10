@@ -65,7 +65,7 @@ export function parseCourseImport(raw: string): CourseImportResult {
   const parsed = courseImportSchema.safeParse(json)
   if (!parsed.success) {
     const first = parsed.error.issues[0]
-    return { ok: false, error: `Fichier invalide — ${formatZodIssue(first)}` }
+    return { ok: false, error: `Fichier invalide - ${formatZodIssue(first)}` }
   }
 
   return { ok: true, data: parsed.data }

@@ -50,7 +50,7 @@ function unwrap(value: unknown): string {
 /**
  * Récupère les derniers articles CyberVice depuis le flux RSS Medium.
  * Résultat mis en cache par Next.js (data cache) et revalidé toutes les
- * MEDIUM_REVALIDATE_SECONDS — Medium n'est pas appelé à chaque visite.
+ * MEDIUM_REVALIDATE_SECONDS - Medium n'est pas appelé à chaque visite.
  */
 export async function getCyberViceArticles(limit = 4): Promise<CyberViceArticle[]> {
   try {

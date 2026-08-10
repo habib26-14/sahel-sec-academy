@@ -27,16 +27,16 @@ const dateTimeFormatter = new Intl.DateTimeFormat('fr-FR', {
 })
 
 export function formatDateFr(iso: string | null | undefined): string {
-  if (!iso) return '—'
+  if (!iso) return '-'
   const d = new Date(iso)
-  if (Number.isNaN(d.getTime())) return '—'
+  if (Number.isNaN(d.getTime())) return '-'
   return dateFormatter.format(d)
 }
 
 export function formatDateTimeFr(iso: string | null | undefined): string {
-  if (!iso) return '—'
+  if (!iso) return '-'
   const d = new Date(iso)
-  if (Number.isNaN(d.getTime())) return '—'
+  if (Number.isNaN(d.getTime())) return '-'
   return dateTimeFormatter.format(d)
 }
 

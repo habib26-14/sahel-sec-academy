@@ -20,7 +20,7 @@ export async function GET(
     return NextResponse.redirect(new URL('/connexion', request.url))
   }
 
-  // M1 : garde d'ownership explicite — seul le propriétaire télécharge son PDF.
+  // M1 : garde d'ownership explicite - seul le propriétaire télécharge son PDF.
   const { data: cert } = await supabase
     .from('certificates')
     .select('*')

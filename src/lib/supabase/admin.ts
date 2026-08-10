@@ -3,7 +3,7 @@ import { createClient as createSupabaseClient, type SupabaseClient } from '@supa
 let admin: SupabaseClient | null = null
 
 /**
- * Client Supabase avec la clé `service_role` — usage STRICTEMENT serveur :
+ * Client Supabase avec la clé `service_role` - usage STRICTEMENT serveur :
  * génération de certificats, uploads storage privilégiés, URLs signées.
  * Il contourne RLS : ne jamais l'utiliser avec des données clients.
  */
