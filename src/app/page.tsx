@@ -40,7 +40,7 @@ export default async function HomePage() {
           <div>
             <p className="inline-flex items-center gap-2 rounded-full bg-navy-700 px-3 py-1 text-xs font-semibold text-teal">
               <ShieldCheck className="h-4 w-4" aria-hidden="true" />
-              100% gratuit, pour toujours
+              100% gratuit
             </p>
             <h1 className="mt-5 text-4xl font-bold leading-tight md:text-5xl">
               Le piratage ne prévient pas. Vous, si.
