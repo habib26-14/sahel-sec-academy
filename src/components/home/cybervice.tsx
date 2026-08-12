@@ -1,5 +1,4 @@
 import Image from 'next/image'
-import Link from 'next/link'
 import { ArrowRight, CalendarDays, ExternalLink, Rss } from 'lucide-react'
 import { getCyberViceArticles, type CyberViceArticle } from '@/lib/medium'
 import { CYBERVICE_MEDIUM_URL } from '@/lib/constants'

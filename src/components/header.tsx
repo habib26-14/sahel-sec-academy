@@ -22,16 +22,6 @@ export default function Header({ user }: { user: SessionUser | null }) {
   const [open, setOpen] = useState(false)
   const isStaff = user?.role === 'INSTRUCTOR' || user?.role === 'ADMIN'
 
-  const navLink = (href: string, label: string) => (
-    <Link
-      href={href}
-      onClick={() => setOpen(false)}
-      className="rounded-md px-3 py-2 text-sm font-medium text-night-100/80 transition-colors hover:bg-white/5 hover:text-white"
-    >
-      {label}
-    </Link>
-  )
-
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-night/85 backdrop-blur-xl">
       <div className="container-x flex h-16 items-center justify-between gap-4 md:h-[72px]">
