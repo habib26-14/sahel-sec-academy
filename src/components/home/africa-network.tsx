@@ -1,67 +1,58 @@
 /**
- * Illustration « Sahel Cyber Network » :
- * silhouette stylisée de l'Afrique (projection équirectangulaire, villes
- * positionnées géographiquement), bouclier cyber connecté au réseau,
- * liaisons de données animées et HUD Intelligence Center. 100 % SVG.
+ * Illustration « African Cyber Talent Network » :
+ * silhouette géographiquement exacte de l'Afrique (données Natural Earth 110m
+ * via world-atlas, projection équirectangulaire), pôles de formation reliés
+ * par un réseau de compétences, petit symbole de protection au centre du
+ * réseau. 100 % SVG, sans image externe.
  */
 
 const NODES: Array<{ x: number; y: number; label: string }> = [
-  { x: 51, y: 139, label: 'Dakar' },
-  { x: 60, y: 120, label: 'Nouakchott' },
-  { x: 105, y: 150, label: 'Bamako' },
-  { x: 142, y: 152, label: 'Ouagadougou' },
-  { x: 163, y: 146, label: 'Niamey' },
-  { x: 237, y: 153, label: "N'Djamena" },
-  { x: 128, y: 191, label: 'Abidjan' },
-  { x: 170, y: 184, label: 'Lagos' },
-  { x: 206, y: 198, label: 'Douala' },
-  { x: 238, y: 245, label: 'Kinshasa' },
-  { x: 227, y: 270, label: 'Luanda' },
-  { x: 361, y: 228, label: 'Nairobi' },
-  { x: 311, y: 366, label: 'Johannesburg' },
+  { x: 59, y: 143.9, label: 'Dakar' },
+  { x: 109, y: 154.7, label: 'Bamako' },
+  { x: 143.3, y: 156.2, label: 'Ouagadougou' },
+  { x: 130.1, y: 193.4, label: 'Abidjan' },
+  { x: 169.2, y: 187.2, label: 'Lagos' },
+  { x: 232.1, y: 245.2, label: 'Kinshasa' },
+  { x: 346.2, y: 228.5, label: 'Nairobi' },
+  { x: 299.8, y: 360.4, label: 'Johannesburg' },
+]
+
+/* Communautés / centres de compétences secondaires (sans label). */
+const COMMUNITIES: Array<[number, number]> = [
+  [323.5, 139.2],
+  [356.4, 173.9],
+  [310.4, 232.0],
 ]
 
 const LINKS: Array<[number, number]> = [
-  [1, 0],
+  [0, 1],
   [1, 2],
   [2, 3],
   [3, 4],
   [4, 5],
-  [0, 2],
-  [2, 6],
+  [5, 6],
   [6, 7],
-  [7, 8],
-  [8, 9],
-  [9, 10],
-  [3, 6],
-  [4, 7],
-  [4, 8],
-  [5, 9],
-  [9, 11],
-  [11, 12],
-  [7, 11],
+  [1, 3],
+  [4, 6],
 ]
 
-/* Liaisons portant un flux lumineux animé (réseau « actif »). */
-const PULSED_LINKS = [1, 3, 6, 8, 10, 15, 17]
+/* Liaisons portant un flux lumineux animé. */
+const PULSED_LINKS = [4, 5, 7, 8]
 
-/* Connexions bouclier -> noeuds sahéliens (Dakar, Nouakchott, Bamako). */
-const SHIELD_LINKS: Array<[number, number, number, number]> = [
-  [50, 36, 105, 150],
-  [51, 56, 60, 120],
-  [52, 80, 51, 139],
+/* Bouclier discret au centre du réseau : protection du continent entier. */
+const SHIELD = { x: 186.1, y: 208.7 }
+const SHIELD_LINKS: Array<[number, number]> = [
+  [143.3, 156.2],
+  [169.2, 187.2],
+  [232.1, 245.2],
 ]
 
+/* Silhouette du continent (Natural Earth 110m, équirectangulaire). */
 const AFRICA_PATH =
-  'M88 21 Q115 18 141 17 Q160 14 180 13 Q182 24 183 34 Q210 38 237 40 ' +
-  'Q272 42 306 47 Q306 50 307 54 Q322 62 337 71 Q340 100 347 134 Q358 142 370 150 ' +
-  'Q384 153 397 157 Q405 160 414 163 Q414 174 413 187 Q398 204 383 223 Q370 229 357 233 ' +
-  'Q355 256 353 281 Q342 300 331 320 Q328 330 326 340 Q319 356 311 371 Q296 388 280 407 ' +
-  'Q268 411 256 413 Q242 412 228 410 Q224 406 219 403 Q213 390 206 376 Q198 346 191 318 ' +
-  'Q192 284 193 253 Q191 249 190 245 Q184 226 177 207 Q174 201 171 197 Q162 193 154 190 ' +
-  'Q145 188 137 186 Q130 188 123 188 Q115 190 106 192 Q94 196 83 196 Q72 190 60 173 ' +
-  'Q53 170 46 168 Q40 162 34 154 Q27 147 23 139 Q26 124 30 104 Q34 90 40 73 Q44 67 49 62 ' +
-  'Q58 50 69 37 Q77 29 88 21 Z'
+  'M358.82,246.45L356.381,252.972L356.686,255.974L360.078,257.909L360.23,259.28L358.782,262.478L359.087,264.09L358.744,266.617L360.592,269.932L362.784,275.155L364.708,276.31L365.566,278.685L365.356,283.952L366.004,288.602L366.214,296.871L367.148,299.469L365.566,303.25L363.508,306.923L360.135,310.202L355.295,312.218L349.331,314.789L343.366,320.469L341.327,321.437L337.631,325.199L335.439,326.418L335.001,330.189L337.516,334.203L338.545,337.303L338.622,338.889L339.555,338.629L339.403,343.816L338.545,346.28L339.784,347.185L339.003,349.38L336.792,351.27L332.429,353.053L326.064,355.92L323.739,357.882L324.197,360.103L325.549,360.462L325.092,363.248L323.758,367.1L323.149,371.499L321.777,373.891L318.156,376.561L317.127,377.331L314.878,380.019L313.411,382.734L310.4,386.532L304.417,391.988L300.682,395.169L296.68,397.579L291.154,399.63L288.468,399.908L287.782,401.377L284.561,400.589L281.932,401.601L276.196,400.58L272.995,401.225L270.803,400.947L265.353,403.035L260.818,403.877L257.56,405.875L255.14,406L252.91,404.119L251.119,404.02L248.832,401.655L248.584,402.39L247.879,400.965L247.918,397.865L246.203,394.318L247.898,393.35L247.765,389.292L244.297,384.337L241.648,379.849L241.629,379.84L237.837,372.959L233.893,368.964L231.835,365.094L230.653,359.942L229.358,356.108L227.585,347.955L227.452,341.621L226.785,338.736L224.727,336.559L221.983,332.178L219.201,325.835L218.058,322.512L213.751,317.342L213.427,313.284L212.932,309.951L213.656,305.302L215.485,300.455L215.771,298.179L217.486,293.413L218.744,291.236L221.773,287.778L223.488,285.422L224.041,281.498L223.755,278.496L222.174,276.606L220.764,273.399L219.468,270.218L219.754,269.125L221.373,267.02L219.773,261.913L218.686,258.366L216.038,255.015L216.533,253.985L215.79,252.345L214.38,248.368L210.035,242.759L204.604,237.42L201.098,233.048L197.878,227.583L198.049,225.827L199.212,224.134L200.488,220.281L201.556,216.357L200.565,215.551L202.394,209.611L203.156,205.436L201.098,201.933L198.678,201.038L197.611,198.663L196.239,197.902L196.315,196.442L190.808,198.35L188.808,198.072L186.769,199.255L182.538,199.138L179.699,195.823L177.965,191.998L174.211,188.513L170.228,188.576L165.56,188.567L161.196,189.185L156.928,190.314L148.62,193.413L145.685,195.232L140.921,196.764L136.195,195.259L133.794,195.322L130.098,194.282L126.706,194.345L120.437,195.268L116.759,196.791L111.519,198.735L110.49,198.601L109.099,198.645L103.649,196.119L98.847,192.096L94.331,189.194L90.767,185.78L89.338,185.386L85.527,183.254L82.783,180.423L81.849,178.488L81.201,174.573L78.877,171.446L76.819,169.368L75.466,168.687L74.151,167.63L73.541,165.291L72.76,164.127L71.235,163.258L68.396,161.045L66.167,160.695L64.966,159.208L64.985,158.402L63.384,157.282L63.041,156.144L62.165,152.086L62.851,149.739L60.66,145.618L58.03,143.736L60.355,142.733L62.908,139.015L64.166,136.291L63.708,133.442L65.195,130.835L65.843,125.845L65.271,120.622L64.623,117.988L65.157,115.345L63.785,112.828L61.003,110.543L61.231,108.313L61.479,105.858L63.499,104.415L65.233,101.656L64.89,99.864L66.719,96.128L69.673,92.76L71.445,91.909L72.855,88.827L72.969,86.005L74.875,82.735L78.4,80.8L81.773,75.397L81.868,75.326L84.517,73.292L89.452,72.71L93.606,69.09L96.274,67.675L100.695,63.258L99.361,56.673L101.381,52.122L102.086,49.327L105.497,45.752L110.794,43.333L114.72,41.147L118.264,35.665L119.922,32.421L123.828,32.439L127.011,34.688L132.041,34.321L137.529,35.494L139.835,35.548L144.923,32.654L150.639,31.741L153.974,29.555L159.081,27.942L168.056,27.001L176.803,26.571L179.47,27.351L184.463,25.272L190.122,25.227L192.276,26.455L195.896,26.141L201.651,24L205.367,24.636L205.195,27.315L209.692,25.371L210.073,26.383L207.425,28.981L207.387,31.427L209.216,32.744L208.53,37.322L205.043,39.983L206.053,42.868L208.778,42.957L210.112,45.475L212.131,46.299L218.343,48.126L220.573,47.67L224.994,48.547L232.006,50.913L234.483,55.625L239.247,56.646L246.698,58.868L252.338,61.493L254.93,60.122L257.464,57.686L256.226,53.636L257.884,51.056L261.695,48.574L265.353,47.858L272.499,48.942L274.309,51.307L276.291,51.325L277.968,52.23L283.227,52.857L284.523,54.604L291.555,54.514L296.661,55.912L301.902,57.48L304.36,58.304L308.438,56.619L310.61,55.105L315.279,54.666L319.052,55.338L320.481,57.963L321.719,56.234L325.95,57.488L330.085,57.784L332.695,56.449L335.649,64.172L336.163,65.543L334.677,67.675L333.534,71.67L332.105,74.43L330.866,75.353L329.094,73.641L326.712,71.285L322.939,63.697L322.386,64.172L324.578,69.762L327.836,75.084L331.838,83.326L333.781,86.202L335.496,89.194L340.241,95.053L339.193,95.976L339.365,99.416L345.52,104.165L346.453,105.249L348.168,110.445L347.006,111.403L347.768,116.85L349.712,123.175L351.732,124.474L354.628,126.436L357.696,132.564L359.163,137.42L362.06,140L369.282,144.999L372.216,148.01L375.094,151.065L376.752,152.883L379.343,154.478L380.601,156.117L380.429,158.312L377.418,159.585L379.686,161.027L377.742,163.867L376.58,165.739L378.543,168.651L380.486,171.204L382.506,173.086L399.828,179.375L404.268,179.339L407.964,174.922L410.346,171.67L410.346,168.911L410.346,163.571L410.365,161.385L410.403,161.305L412.099,161.197L414.539,160.409L417.34,159.88L419.855,158.07L421.856,158.053L421.97,159.513L421.494,162.595L421.513,165.372L420.389,167.289L418.902,173.014L416.349,178.918L413.071,185.682L408.536,193.44L404.02,199.362L397.789,206.583L392.491,210.874L384.583,216.124L379.648,220.156L373.855,226.562L372.636,229.357L371.435,230.611L367.719,232.725L366.423,234.929L364.442,235.323L363.679,239.05L361.984,241.182L360.955,244.703Z'
+
+const MADAGASCAR_PATH =
+  'M413.548,287.706L414.958,289.955L416.273,293.449L417.13,299.819L418.502,302.291L417.968,304.836L417.035,306.395L415.244,303.286L414.234,304.854L415.244,308.778L414.786,311.017L413.319,312.245L412.976,316.724L410.899,322.897L408.288,330.189L405.011,340.224L402.991,347.579L400.609,353.716L396.302,354.97L391.672,357.21L388.623,355.857L384.431,353.967L382.964,351.171L382.621,346.477L380.753,342.257L380.258,338.45L381.211,334.633L383.65,333.719L383.669,331.954L386.203,327.95L386.679,324.572L385.441,322.064L384.45,318.731L384.012,313.857L385.86,310.892L386.584,307.532L389.214,307.335L392.167,306.251L394.13,305.293L396.455,305.23L399.466,302.211L403.829,298.95L405.411,296.289L404.687,294.022L406.935,294.658L409.851,290.985L409.965,287.796L411.718,285.431Z'
 
 export default function AfricaNetwork() {
   return (
@@ -69,14 +60,13 @@ export default function AfricaNetwork() {
       className="relative overflow-hidden rounded-2xl border border-white/10"
       style={{ backgroundColor: '#020B12' }}
     >
-      <div className="grid-bg absolute inset-0 opacity-60" aria-hidden="true" />
-      <div className="scanline absolute inset-0" aria-hidden="true" />
+      <div className="grid-bg absolute inset-0 opacity-40" aria-hidden="true" />
 
-      {/* Étiquette de service */}
+      {/* Badge secondaire */}
       <div className="absolute left-3 top-3 z-10 flex items-center gap-2 rounded-md border border-white/10 bg-[#020B12]/70 px-2.5 py-1.5 backdrop-blur">
         <span className="h-1.5 w-1.5 rounded-full bg-teal" aria-hidden="true" />
         <span className="font-mono text-[9px] font-semibold uppercase tracking-[0.22em] text-night-100/70">
-          Sahel Cyber Network
+          African Cyber Talent Network
         </span>
       </div>
 
@@ -84,203 +74,202 @@ export default function AfricaNetwork() {
         viewBox="0 0 480 430"
         className="relative w-full"
         role="img"
-        aria-label="Réseau cyber de Sahel Sec Academy : bouclier de protection connecté à une carte de l'Afrique reliant les pôles cyber africains"
+        aria-label="Réseau africain de compétences en cybersécurité : pôles de formation connectés à travers le continent"
       >
         <defs>
           <radialGradient id="hub-glow" cx="55%" cy="45%" r="62%">
-            <stop offset="0%" stopColor="rgba(15,168,100,0.13)" />
+            <stop offset="0%" stopColor="rgba(15,168,100,0.11)" />
             <stop offset="100%" stopColor="rgba(15,168,100,0)" />
           </radialGradient>
           <linearGradient id="africa-fill" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#071425" />
+            <stop offset="0%" stopColor="#081627" />
             <stop offset="100%" stopColor="#030A12" />
           </linearGradient>
         </defs>
 
-        {/* Halo réseautique */}
-        <ellipse cx="245" cy="205" rx="205" ry="210" fill="url(#hub-glow)" />
+        {/* Halo lumineux derrière le continent */}
+        <ellipse cx="250" cy="215" rx="210" ry="205" fill="url(#hub-glow)" />
 
-        {/* Madagascar (île, contour subtil) */}
-        <g transform="translate(28 0)" className="animate-float-slow">
-          <ellipse
-            cx="391"
-            cy="322"
-            rx="10"
-            ry="36"
-            fill="rgba(4,12,22,0.6)"
-            stroke="rgba(15,168,100,0.3)"
+        <g className="animate-float-slow">
+          {/* Madagascar */}
+          <path
+            d={MADAGASCAR_PATH}
+            fill="rgba(15,168,100,0.04)"
+            stroke="rgba(15,168,100,0.35)"
             strokeWidth="1"
-            strokeDasharray="2 4"
           />
-        </g>
 
-        {/* Carte de l'Afrique */}
-        <g transform="translate(28 0)" className="animate-float-slow">
+          {/* Continent */}
           <path
             d={AFRICA_PATH}
             fill="none"
-            stroke="rgba(15,168,100,0.1)"
+            stroke="rgba(15,168,100,0.08)"
             strokeWidth="5"
             strokeLinejoin="round"
           />
           <path
             d={AFRICA_PATH}
             fill="url(#africa-fill)"
-            stroke="rgba(15,168,100,0.55)"
+            stroke="rgba(15,168,100,0.5)"
             strokeWidth="1.3"
             strokeLinejoin="round"
           />
           <path
             d={AFRICA_PATH}
             fill="none"
-            stroke="rgba(15,168,100,0.16)"
+            stroke="rgba(15,168,100,0.14)"
             strokeWidth="1"
             strokeDasharray="2 7"
             strokeLinejoin="round"
           />
-        </g>
 
-        {/* Bouclier cyber (protection), connecté au réseau */}
-        <g aria-hidden="true">
-          <g transform="translate(10 128)">
+          {/* Connexions bouclier -> pôles */}
+          {SHIELD_LINKS.map(([nx, ny], i) => (
+            <line
+              key={`sl-${i}`}
+              x1={SHIELD.x}
+              y1={SHIELD.y}
+              x2={nx}
+              y2={ny}
+              stroke="rgba(15,168,100,0.28)"
+              strokeWidth="1"
+              strokeDasharray="2 5"
+              className="animate-dash-flow"
+              style={{ animationDelay: `${i * 0.8}s` }}
+            />
+          ))}
+
+          {/* Liaisons de compétences entre pôles */}
+          {LINKS.map(([a, b], i) => {
+            const na = NODES[a]
+            const nb = NODES[b]
+            return (
+              <g key={`link-${i}`}>
+                <line
+                  x1={na.x}
+                  y1={na.y}
+                  x2={nb.x}
+                  y2={nb.y}
+                  stroke="rgba(15,168,100,0.05)"
+                  strokeWidth="3.5"
+                  strokeLinecap="round"
+                />
+                <line
+                  x1={na.x}
+                  y1={na.y}
+                  x2={nb.x}
+                  y2={nb.y}
+                  stroke="rgba(15,168,100,0.3)"
+                  strokeWidth="1"
+                  className="animate-dash-flow"
+                  style={{ animationDelay: `${i * 0.5}s` }}
+                />
+                {PULSED_LINKS.includes(i) && (
+                  <circle r="1.5" fill="#66F0AE" opacity="0.9">
+                    <animateMotion
+                      dur={`${2.6 + (i % 4) * 0.6}s`}
+                      repeatCount="indefinite"
+                      begin={`${i * 0.8}s`}
+                      path={`M${na.x} ${na.y} L${nb.x} ${nb.y}`}
+                    />
+                  </circle>
+                )}
+              </g>
+            )
+          })}
+
+          {/* Symbole de protection au centre du réseau */}
+          <g transform={`translate(${SHIELD.x} ${SHIELD.y})`}>
+            <circle
+              r="8"
+              fill="none"
+              stroke="rgba(15,168,100,0.2)"
+              strokeWidth="1"
+              className="animate-pulse-node"
+            />
             <path
-              d="M28 2 L54 12 V38 c0 24-15 42-26 52 C17 80 2 62 2 38 V12 Z"
-              fill="rgba(4,10,20,0.85)"
-              stroke="rgba(15,168,100,0.85)"
-              strokeWidth="1.8"
+              d="M0 -13 L11 -7.5 V7 C11 19 5 26 0 30 C-5 26 -11 19 -11 7 V-7.5 Z"
+              fill="rgba(4,10,20,0.95)"
+              stroke="rgba(15,168,100,0.9)"
+              strokeWidth="1.6"
               strokeLinejoin="round"
             />
             <path
-              d="M28 13 L46 19 V36 c0 17-9 30-18 37 C19 66 10 53 10 36 V19 Z"
+              d="M0 -7 L7 -3 V5 C7 13 3 19 0 21 C-3 19 -7 13 -7 5 V-3 Z"
               fill="none"
               stroke="rgba(15,168,100,0.35)"
               strokeWidth="1"
               strokeLinejoin="round"
               strokeDasharray="2 4"
             />
-            <circle
-              cx="28"
-              cy="30"
-              r="8"
-              fill="none"
-              stroke="rgba(15,168,100,0.22)"
-              strokeWidth="1"
-              className="animate-pulse-node"
-            />
-            <circle cx="28" cy="30" r="3.4" fill="#0FA864" />
-            <circle cx="28" cy="30" r="1.4" fill="#9CFFD4" />
+            <circle cx="0" cy="0" r="2.4" fill="#0FA864" />
+            <circle cx="0" cy="0" r="1.1" fill="#9CFFD4" />
             <path
-              d="M28 36 v10"
-              stroke="rgba(15,168,100,0.9)"
-              strokeWidth="2"
+              d="M0 4 v7"
+              stroke="rgba(15,168,100,0.85)"
+              strokeWidth="1.6"
               strokeLinecap="round"
             />
           </g>
 
-          {/* Liaisons bouclier -> Sahel */}
-          {SHIELD_LINKS.map(([x1, y1, x2, y2], i) => (
-            <line
-              key={`shield-${i}`}
-              x1={x1}
-              y1={y1}
-              x2={x2}
-              y2={y2}
-              stroke="rgba(15,168,100,0.4)"
-              strokeWidth="1"
-              strokeDasharray="2 5"
-              className="animate-dash-flow"
-              style={{ animationDelay: `${i * 0.9}s` }}
-            />
+          {/* Communautés secondaires */}
+          {COMMUNITIES.map(([cx, cy]) => (
+            <g key={`c-${cx}-${cy}`}>
+              <circle cx={cx} cy={cy} r="5" fill="rgba(15,168,100,0.05)" />
+              <circle
+                cx={cx}
+                cy={cy}
+                r="2.2"
+                fill="rgba(4,10,20,0.9)"
+                stroke="rgba(15,168,100,0.5)"
+                strokeWidth="1"
+              />
+            </g>
+          ))}
+
+          {/* Pôles de formation */}
+          {NODES.map((node, i) => (
+            <g key={node.label}>
+              <circle
+                cx={node.x}
+                cy={node.y}
+                r="8"
+                fill="rgba(15,168,100,0.06)"
+                aria-hidden="true"
+              />
+              <circle
+                cx={node.x}
+                cy={node.y}
+                r="4.5"
+                fill="rgba(4,10,20,0.92)"
+                stroke="rgba(15,168,100,0.9)"
+                strokeWidth="1.4"
+                className="animate-pulse-node"
+                style={{ animationDelay: `${i * 0.4}s` }}
+              />
+              <circle cx={node.x} cy={node.y} r="1.7" fill="#0FA864" />
+              <text
+                x={node.x + 7}
+                y={node.y - 5}
+                fill="rgba(226,232,240,0.55)"
+                fontSize="8.5"
+                fontFamily="ui-monospace, monospace"
+              >
+                {node.label}
+              </text>
+            </g>
           ))}
         </g>
-
-        {/* Liaisons de données entre pôles cyber */}
-        {LINKS.map(([a, b], i) => {
-          const na = NODES[a]
-          const nb = NODES[b]
-          return (
-            <g key={`link-${i}`}>
-              <line
-                x1={na.x}
-                y1={na.y}
-                x2={nb.x}
-                y2={nb.y}
-                stroke="rgba(15,168,100,0.06)"
-                strokeWidth="3.5"
-                strokeLinecap="round"
-              />
-              <line
-                x1={na.x}
-                y1={na.y}
-                x2={nb.x}
-                y2={nb.y}
-                stroke="rgba(15,168,100,0.32)"
-                strokeWidth="1"
-                className="animate-dash-flow"
-                style={{ animationDelay: `${i * 0.55}s` }}
-              />
-              {PULSED_LINKS.includes(i) && (
-                <circle r="1.6" fill="#66F0AE" opacity="0.9">
-                  <animateMotion
-                    dur={`${2.4 + (i % 5) * 0.5}s`}
-                    repeatCount="indefinite"
-                    begin={`${i * 0.7}s`}
-                    path={`M${na.x} ${na.y} L${nb.x} ${nb.y}`}
-                  />
-                </circle>
-              )}
-            </g>
-          )
-        })}
-
-        {/* Pôles cyber africains */}
-        {NODES.map((node, i) => (
-          <g key={node.label}>
-            <circle
-              cx={node.x}
-              cy={node.y}
-              r="9"
-              fill="rgba(15,168,100,0.07)"
-              aria-hidden="true"
-            />
-            <circle
-              cx={node.x}
-              cy={node.y}
-              r="5"
-              fill="rgba(4,10,20,0.92)"
-              stroke="rgba(15,168,100,0.9)"
-              strokeWidth="1.5"
-              className="animate-pulse-node"
-              style={{ animationDelay: `${i * 0.35}s` }}
-            />
-            <circle cx={node.x} cy={node.y} r="1.8" fill="#0FA864" />
-            <text
-              x={node.x + 9}
-              y={node.y - 6}
-              fill="rgba(226,232,240,0.6)"
-              fontSize="8.5"
-              fontFamily="ui-monospace, monospace"
-            >
-              {node.label}
-            </text>
-          </g>
-        ))}
       </svg>
 
-      {/* HUD Intelligence Center */}
-      <div className="absolute inset-x-0 bottom-0 z-10 flex items-center justify-between gap-3 border-t border-white/10 bg-[#020B12]/85 px-4 py-2.5 backdrop-blur">
-        <div className="min-w-0">
-          <p className="truncate font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-night-100/75">
-            Sahel Sec · Intelligence Center
-          </p>
-          <p className="font-mono text-[9px] uppercase tracking-[0.24em] text-teal/60">
-            Réseau de veille · Sahel
-          </p>
-        </div>
-        <span className="inline-flex shrink-0 items-center gap-1.5 font-mono text-[10px] font-bold uppercase tracking-widest text-teal">
-          <span className="h-1.5 w-1.5 rounded-full bg-teal" aria-hidden="true" />
-          [ Opérationnel ]
-        </span>
+      {/* Branding */}
+      <div className="absolute inset-x-0 bottom-0 z-10 border-t border-white/10 bg-[#020B12]/85 px-4 py-2.5 backdrop-blur">
+        <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-night-100/80">
+          Sahel Sec Academy
+        </p>
+        <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-teal/60">
+          Réseau de compétences · Afrique
+        </p>
       </div>
     </div>
   )
