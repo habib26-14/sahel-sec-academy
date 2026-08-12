@@ -2,8 +2,7 @@
  * Illustration « African Cyber Talent Network » :
  * silhouette géographiquement exacte de l'Afrique (données Natural Earth 110m
  * via world-atlas, projection équirectangulaire), pôles de formation reliés
- * par un réseau de compétences, petit symbole de protection au centre du
- * réseau. 100 % SVG, sans image externe.
+ * par un réseau de compétences minimal et élégant. 100 % SVG, sans image externe.
  */
 
 const NODES: Array<{ x: number; y: number; label: string }> = [
@@ -17,35 +16,19 @@ const NODES: Array<{ x: number; y: number; label: string }> = [
   { x: 299.8, y: 360.4, label: 'Johannesburg' },
 ]
 
-/* Communautés / centres de compétences secondaires (sans label). */
-const COMMUNITIES: Array<[number, number]> = [
-  [323.5, 139.2],
-  [356.4, 173.9],
-  [310.4, 232.0],
-]
-
+/* Épine dorsale du réseau : connexions principales seulement. */
 const LINKS: Array<[number, number]> = [
-  [0, 1],
-  [1, 2],
-  [2, 3],
-  [3, 4],
-  [4, 5],
-  [5, 6],
-  [6, 7],
-  [1, 3],
-  [4, 6],
+  [0, 1],  // Dakar — Bamako
+  [1, 2],  // Bamako — Ouagadougou
+  [2, 3],  // Ouagadougou — Abidjan
+  [3, 4],  // Abidjan — Lagos
+  [4, 5],  // Lagos — Kinshasa
+  [5, 6],  // Kinshasa — Nairobi
+  [6, 7],  // Nairobi — Johannesburg
 ]
 
-/* Liaisons portant un flux lumineux animé. */
-const PULSED_LINKS = [4, 5, 7, 8]
-
-/* Bouclier discret au centre du réseau : protection du continent entier. */
-const SHIELD = { x: 186.1, y: 208.7 }
-const SHIELD_LINKS: Array<[number, number]> = [
-  [143.3, 156.2],
-  [169.2, 187.2],
-  [232.1, 245.2],
-]
+/* Liaisons portant un flux lumineux (les segments longs). */
+const PULSED_LINKS = [4, 5, 6]
 
 /* Silhouette du continent (Natural Earth 110m, équirectangulaire). */
 const AFRICA_PATH =
@@ -123,22 +106,6 @@ export default function AfricaNetwork() {
             strokeLinejoin="round"
           />
 
-          {/* Connexions bouclier -> pôles */}
-          {SHIELD_LINKS.map(([nx, ny], i) => (
-            <line
-              key={`sl-${i}`}
-              x1={SHIELD.x}
-              y1={SHIELD.y}
-              x2={nx}
-              y2={ny}
-              stroke="rgba(15,168,100,0.28)"
-              strokeWidth="1"
-              strokeDasharray="2 5"
-              className="animate-dash-flow"
-              style={{ animationDelay: `${i * 0.8}s` }}
-            />
-          ))}
-
           {/* Liaisons de compétences entre pôles */}
           {LINKS.map(([a, b], i) => {
             const na = NODES[a]
@@ -177,55 +144,6 @@ export default function AfricaNetwork() {
               </g>
             )
           })}
-
-          {/* Symbole de protection au centre du réseau */}
-          <g transform={`translate(${SHIELD.x} ${SHIELD.y})`}>
-            <circle
-              r="8"
-              fill="none"
-              stroke="rgba(15,168,100,0.2)"
-              strokeWidth="1"
-              className="animate-pulse-node"
-            />
-            <path
-              d="M0 -13 L11 -7.5 V7 C11 19 5 26 0 30 C-5 26 -11 19 -11 7 V-7.5 Z"
-              fill="rgba(4,10,20,0.95)"
-              stroke="rgba(15,168,100,0.9)"
-              strokeWidth="1.6"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M0 -7 L7 -3 V5 C7 13 3 19 0 21 C-3 19 -7 13 -7 5 V-3 Z"
-              fill="none"
-              stroke="rgba(15,168,100,0.35)"
-              strokeWidth="1"
-              strokeLinejoin="round"
-              strokeDasharray="2 4"
-            />
-            <circle cx="0" cy="0" r="2.4" fill="#0FA864" />
-            <circle cx="0" cy="0" r="1.1" fill="#9CFFD4" />
-            <path
-              d="M0 4 v7"
-              stroke="rgba(15,168,100,0.85)"
-              strokeWidth="1.6"
-              strokeLinecap="round"
-            />
-          </g>
-
-          {/* Communautés secondaires */}
-          {COMMUNITIES.map(([cx, cy]) => (
-            <g key={`c-${cx}-${cy}`}>
-              <circle cx={cx} cy={cy} r="5" fill="rgba(15,168,100,0.05)" />
-              <circle
-                cx={cx}
-                cy={cy}
-                r="2.2"
-                fill="rgba(4,10,20,0.9)"
-                stroke="rgba(15,168,100,0.5)"
-                strokeWidth="1"
-              />
-            </g>
-          ))}
 
           {/* Pôles de formation */}
           {NODES.map((node, i) => (
