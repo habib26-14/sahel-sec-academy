@@ -3,70 +3,114 @@
 @tailwind utilities;
 
 :root {
-  --background: #f6f8fb;
-  --foreground: #0c2340;
+  --background: #f7f9fc;
+  --foreground: #040a14;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  font-family: var(--font-geist), system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-@layer utilities {
-  .container-x {
-    @apply mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8;
-  }
-}
-
-/* Accessibilité : focus visible cohérent */
+/* AccessibilitǸ : focus visible cohǸrent */
 :focus-visible {
-  outline: 2px solid #1d9e75;
+  outline: 2px solid #0fa864;
   outline-offset: 2px;
 }
 
-/* Respecter la préférence de mouvement réduit (accessibilité) */
+/* Respecter la prǸfǸrence de mouvement rǸduit (accessibilitǸ) */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
+/* ============================================================
+   Utilitaires de mise en page
+   ============================================================ */
+@layer utilities {
+  .container-x {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+  .container-narrow {
+    @apply mx-auto w-full max-w-3xl px-4 sm:px-6 lg:px-8;
+  }
+  /* Ligne au-dessus des titres de section : "SAMBA · INTELLIGENCE CYBER" */
+  .eyebrow {
+    @apply inline-flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-[0.18em] text-teal;
+  }
+  .eyebrow::before {
+    content: '';
+    @apply inline-block h-px w-8 bg-teal/60;
+  }
+  .section-title {
+    @apply text-3xl font-bold leading-tight tracking-tight text-night md:text-4xl;
+  }
+  .section-lead {
+    @apply mt-4 max-w-2xl text-base leading-relaxed text-slate-600 md:text-lg;
+  }
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* ============================================================
+   Boutons
+   ============================================================ */
 @layer components {
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-teal px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-teal-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal disabled:cursor-not-allowed disabled:opacity-60;
+    @apply inline-flex items-center justify-center gap-2 rounded-md bg-teal px-5 py-2.5 text-sm font-semibold text-white shadow-sm shadow-teal/20 transition-all hover:bg-teal-600 hover:shadow-md hover:shadow-teal/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal disabled:cursor-not-allowed disabled:opacity-60;
   }
   .btn-outline {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg border border-navy-200 bg-white px-4 py-2 text-sm font-semibold text-navy transition-colors hover:border-teal hover:text-teal disabled:cursor-not-allowed disabled:opacity-60;
+    @apply inline-flex items-center justify-center gap-2 rounded-md border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-night transition-all hover:border-teal hover:text-teal disabled:cursor-not-allowed disabled:opacity-60;
+  }
+  .btn-outline-dark {
+    @apply inline-flex items-center justify-center gap-2 rounded-md border border-white/20 bg-white/5 px-5 py-2.5 text-sm font-semibold text-white backdrop-blur transition-all hover:border-teal hover:text-teal disabled:cursor-not-allowed disabled:opacity-60;
   }
   .btn-ghost {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-navy-700 transition-colors hover:bg-navy-50 disabled:cursor-not-allowed disabled:opacity-60;
+    @apply inline-flex items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-semibold text-night-600 transition-colors hover:bg-night-50 disabled:cursor-not-allowed disabled:opacity-60;
   }
   .btn-danger {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60;
+    @apply inline-flex items-center justify-center gap-2 rounded-md bg-red-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60;
   }
   .input {
-    @apply w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-navy placeholder:text-slate-400 focus:border-teal focus:outline-none focus:ring-2 focus:ring-teal/30;
+    @apply w-full rounded-md border border-slate-300 bg-white px-3 py-2.5 text-sm text-night placeholder:text-slate-400 focus:border-teal focus:outline-none focus:ring-2 focus:ring-teal/30;
   }
   .label {
-    @apply mb-1 block text-sm font-medium text-navy-700;
+    @apply mb-1 block text-sm font-medium text-night-700;
   }
   .card {
-    @apply rounded-xl border border-slate-200 bg-white shadow-sm;
+    @apply rounded-xl border border-slate-200 bg-white shadow-sm transition-all duration-300;
   }
-  /* Contenu de leçon (Markdown rendu) - typographie sobre et lisible */
+  /* Cartes survolées dans les grilles d'apprentissage */
+  .card-hover {
+    @apply hover:-translate-y-1 hover:border-teal/30 hover:shadow-lg hover:shadow-night/5;
+  }
+}
+
+/* ============================================================
+   Contenu de leçon (Markdown rendu)
+   ============================================================ */
+@layer components {
   .prose-lean {
-    @apply max-w-prose text-[15px] leading-relaxed text-navy-800;
+    @apply max-w-prose text-[15px] leading-relaxed text-night-600;
   }
   .prose-lean h1,
   .prose-lean h2,
   .prose-lean h3 {
-    @apply mb-3 mt-6 font-bold text-navy;
+    @apply mb-3 mt-6 font-bold text-night;
+    letter-spacing: -0.02em;
   }
   .prose-lean h1 {
     @apply text-2xl;
@@ -87,10 +131,10 @@ body {
     @apply mb-4 list-decimal space-y-1 pl-6;
   }
   .prose-lean code {
-    @apply rounded bg-slate-100 px-1.5 py-0.5 font-mono text-[0.85em] text-teal-700;
+    @apply rounded bg-night-50 px-1.5 py-0.5 font-mono text-[0.85em] text-teal-700;
   }
   .prose-lean pre {
-    @apply mb-4 overflow-x-auto rounded-lg bg-navy p-4 text-sm text-white;
+    @apply mb-4 overflow-x-auto rounded-lg bg-night p-4 text-sm text-white;
   }
   .prose-lean pre code {
     @apply bg-transparent p-0 text-white;
@@ -99,9 +143,70 @@ body {
     @apply font-medium text-teal underline decoration-teal/40 underline-offset-2 hover:decoration-teal;
   }
   .prose-lean strong {
-    @apply font-bold text-navy;
+    @apply font-bold text-night;
   }
   .prose-lean blockquote {
     @apply mb-4 border-l-4 border-teal pl-4 text-slate-600;
   }
+}
+
+/* ============================================================
+   Micro-interactions (légères, mouvement réduit respecté)
+   ============================================================ */
+
+/* Apparition progressive au scroll */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Fond quadrillé technique (hero et sections sombres) */
+.grid-bg {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+.grid-bg-light {
+  background-image:
+    linear-gradient(to right, rgba(4, 10, 20, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(4, 10, 20, 0.05) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+
+/* Ligne de balayage dans les panneaux sombres (effet radar discret) */
+.scanline::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 32%;
+  background: linear-gradient(
+    105deg,
+    transparent,
+    rgba(15, 168, 100, 0.06),
+    transparent
+  );
+  animation: scan 5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Sélecteur de texte */
+::selection {
+  background: rgba(15, 168, 100, 0.25);
 }
