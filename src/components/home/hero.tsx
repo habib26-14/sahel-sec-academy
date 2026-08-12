@@ -56,7 +56,7 @@ export default function Hero() {
           <ul className="mt-10 flex flex-wrap gap-x-8 gap-y-3">
             {TRUST.map(({ icon: Icon, label }) => (
               <li key={label} className="flex items-center gap-2 text-sm text-night-100/85">
-                <Icon className="h-4.5 w-4.5 h-5 w-5 text-teal" aria-hidden="true" />
+                <Icon className="h-5 w-5 text-teal" aria-hidden="true" />
                 {label}
               </li>
             ))}
@@ -66,12 +66,6 @@ export default function Hero() {
         <div className="relative">
           <div className="animate-fade-up" style={{ animationDelay: '200ms' }}>
             <AfricaNetwork />
-          </div>
-          <div className="pointer-events-none absolute -bottom-3 left-6 right-6 flex items-center justify-between rounded-md border border-white/10 bg-night-900/90 px-4 py-2.5 backdrop-blur">
-            <span className="font-mono text-[11px] uppercase tracking-widest text-night-100/60">
-              Sahel Sec · Intelligence Center
-            </span>
-            <span className="text-xs font-semibold text-teal">Opérationnel</span>
           </div>
         </div>
       </div>
